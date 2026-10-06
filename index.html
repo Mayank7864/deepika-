@@ -1,0 +1,146 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Deepika, a small urgent matter</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Bagel+Fat+One&family=Nunito:wght@500;700;800&display=swap" rel="stylesheet">
+<style>
+:root{--bg:#2a0f3a;--bg2:#47195c;--pink:#ff4f8b;--mango:#ffc933;--mint:#7be8c4;--ink:#fff6ec;
+box-sizing:border-box;padding-top:env(safe-area-inset-top,0px);padding-bottom:env(safe-area-inset-bottom,0px)}
+html{scroll-padding-top:env(safe-area-inset-top,0px)}
+*{box-sizing:border-box}
+body{margin:0;min-height:100vh;background:radial-gradient(circle at 20% 0%,var(--bg2),var(--bg) 60%);color:var(--ink);font-family:Nunito,system-ui,sans-serif;font-weight:500;overflow-x:hidden}
+main{max-width:640px;margin:0 auto;padding:28px 18px 60px;text-align:center}
+h1,h2{font-family:'Bagel Fat One',Impact,sans-serif;font-weight:400;line-height:1.05;margin:0 0 12px}
+h1{font-size:clamp(2.4rem,9vw,3.8rem);color:var(--mango);transform:rotate(-2deg)}
+h2{font-size:clamp(1.8rem,7vw,2.6rem);color:var(--pink)}
+p{font-size:1.08rem;line-height:1.55;margin:0 0 14px}
+.btn{font:800 1.05rem Nunito,sans-serif;border:0;border-radius:999px;padding:14px 26px;cursor:pointer;background:var(--pink);color:#fff;box-shadow:0 5px 0 #b02358;transition:transform .1s}
+.btn:active{transform:translateY(4px);box-shadow:0 1px 0 #b02358}
+.btn.alt{background:var(--mango);color:#3b2300;box-shadow:0 5px 0 #b88a00}
+.btn:focus-visible{outline:3px solid var(--mint);outline-offset:3px}
+.hidden{display:none!important}
+#arena{position:relative;height:360px;margin:16px 0;border:3px dashed var(--pink);border-radius:22px;overflow:hidden;background:rgba(255,255,255,.04);touch-action:manipulation;user-select:none}
+.item{position:absolute;font-size:2.6rem;cursor:pointer;line-height:1;will-change:transform}
+.hud{display:flex;justify-content:space-between;font-weight:800;font-size:1.05rem}
+.bar{height:14px;border-radius:9px;background:rgba(255,255,255,.15);overflow:hidden;margin:8px 0}
+#fill{height:100%;width:0;background:linear-gradient(90deg,var(--pink),var(--mango));transition:width .25s}
+#toast{min-height:1.6em;color:var(--mint);font-weight:800}
+#ask{position:relative;min-height:230px}
+#no{position:fixed;z-index:5}
+.opts{display:grid;grid-template-columns:1fr 1fr;gap:12px;margin:18px 0}
+.opts .btn{box-shadow:0 5px 0 #b88a00}
+.fine{font-size:.85rem;opacity:.75}
+.stamp{display:inline-block;border:4px solid var(--mint);color:var(--mint);padding:8px 16px;border-radius:12px;font-family:'Bagel Fat One',sans-serif;font-size:1.5rem;transform:rotate(-5deg);margin:10px 0 18px}
+.conf{position:fixed;top:-40px;font-size:1.8rem;pointer-events:none;z-index:9;animation:fall linear forwards}
+@keyframes fall{to{transform:translateY(115vh) rotate(540deg)}}
+@media (prefers-reduced-motion:reduce){.conf{animation-duration:.01s}}
+</style>
+</head>
+<body>
+<main>
+
+<section id="intro">
+  <h1>Deepika, this is a formal notice.</h1>
+  <p>Someone (me) has developed a mild, highly inconvenient crush on you. Before I'm allowed to ask you something important, you must pass a very scientific test.</p>
+  <p class="fine">Doctors say it's 90% charm, 10% nervous sweating.</p>
+  <button class="btn" id="start">Fine, I accept the test 😤</button>
+</section>
+
+<section id="game" class="hidden">
+  <h2>Catch 10 hearts</h2>
+  <p>Tap the hearts. Avoid the 🥦 broccoli and the 📵 "seen" ghosts. I will not be accepting broccoli.</p>
+  <div class="hud"><span>💖 <b id="score">0</b>/10</span><span id="lives">❤️❤️❤️</span></div>
+  <div class="bar"><div id="fill"></div></div>
+  <div id="arena" aria-label="Game area"></div>
+  <div id="toast"></div>
+</section>
+
+<section id="ask" class="hidden">
+  <h2>Deepika, you passed! 🎉</h2>
+  <p>Your reflexes are elite and your taste in hearts is impeccable. Which brings me to the actual question:</p>
+  <h1 style="transform:rotate(1deg)">Will you go on a first date with me?</h1>
+  <button class="btn" id="yes">YES 💘</button>
+  <button class="btn alt" id="no">No 🙃</button>
+  <p class="fine" id="nohint" style="margin-top:22px"></p>
+</section>
+
+<section id="plan" class="hidden">
+  <div class="stamp">APPROVED ✅</div>
+  <h2>She said YES!</h2>
+  <p>I am now the happiest person in Frankfurt (and probably Hesse). Pick the vibe for our first date:</p>
+  <div class="opts" id="opts">
+    <button class="btn alt" data-v="chai & a long walk ☕">☕ Chai &amp; a long walk</button>
+    <button class="btn alt" data-v="pizza, and I will not judge your toppings 🍕">🍕 Pizza (no judging)</button>
+    <button class="btn alt" data-v="momos and bad jokes 🥟">🥟 Momos &amp; bad jokes</button>
+    <button class="btn alt" data-v="surprise me, I trust you 🎲">🎲 Surprise me</button>
+  </div>
+  <p id="final" class="hidden"></p>
+  <p class="fine">Screenshot this and send it to me. It is legally binding*<br>*not legally binding.</p>
+</section>
+
+</main>
+<script>
+const $=id=>document.getElementById(id);
+const show=id=>{['intro','game','ask','plan'].forEach(s=>$(s).classList.toggle('hidden',s!==id))};
+function confetti(n=60){const e=['💖','💘','✨','🌸','🥳','💕'];for(let i=0;i<n;i++){const c=document.createElement('div');c.className='conf';c.textContent=e[i%e.length];c.style.left=Math.random()*100+'vw';c.style.animationDuration=(2+Math.random()*2.5)+'s';c.style.animationDelay=Math.random()*.8+'s';document.body.appendChild(c);setTimeout(()=>c.remove(),5500)}}
+
+// ---- game ----
+let score=0,lives=3,raf,running=false,items=[],last=0,spawn=0;
+const arena=$('arena');
+const quips=['Smooth.','Deepika has hands of gold.','Cupid is taking notes.','My heart is also this easy to catch.','Wow. Okay. I see you.','Ten out of ten (almost).'];
+const bad=['Broccoli?! In THIS economy?','You tapped a ghost. Ghosts do not text back.','Not the broccoli!'];
+function toast(t){$('toast').textContent=t}
+function add(){
+  const good=Math.random()<.68;
+  const el=document.createElement('div');el.className='item';
+  el.textContent=good?'💖':(Math.random()<.5?'🥦':'📵');
+  const o={el,good,x:Math.random()*(arena.clientWidth-50),y:-50,v:70+Math.random()*80+score*6};
+  el.style.left=o.x+'px';
+  const hit=e=>{e.preventDefault();if(!o.alive)return;o.alive=false;el.remove();
+    if(o.good){score++;$('score').textContent=score;$('fill').style.width=score*10+'%';toast(quips[Math.floor(Math.random()*quips.length)]);if(score>=10)win()}
+    else{lives--;$('lives').textContent=lives>0?'❤️'.repeat(lives):'💔';toast(bad[Math.floor(Math.random()*bad.length)]);if(lives<=0)lose()}};
+  el.addEventListener('pointerdown',hit);
+  o.alive=true;arena.appendChild(el);items.push(o);
+}
+function loop(t){
+  if(!running)return;const dt=Math.min((t-last)/1000,.05);last=t;spawn-=dt;
+  if(spawn<=0){add();spawn=.7-Math.min(score*.03,.25)}
+  items=items.filter(o=>{if(!o.alive)return false;o.y+=o.v*dt;o.el.style.transform=`translateY(${o.y}px)`;
+    if(o.y>arena.clientHeight){o.el.remove();o.alive=false;return false}return true});
+  raf=requestAnimationFrame(loop);
+}
+function reset(){items.forEach(o=>o.el.remove());items=[];score=0;lives=3;$('score').textContent=0;$('fill').style.width='0';$('lives').textContent='❤️❤️❤️';toast('')}
+function begin(){reset();running=true;last=performance.now();spawn=.2;raf=requestAnimationFrame(loop)}
+function stop(){running=false;cancelAnimationFrame(raf)}
+function win(){stop();confetti(40);setTimeout(()=>show('ask'),700)}
+function lose(){stop();toast('Out of lives! Deepika, even I would have caught more. Try again 😌');
+  const b=document.createElement('button');b.className='btn alt';b.textContent='Retry (I believe in you)';b.style.marginTop='10px';
+  b.onclick=()=>{b.remove();begin()};$('toast').appendChild(document.createElement('br'));$('toast').appendChild(b)}
+$('start').onclick=()=>{show('game');begin()};
+
+// ---- the shy "No" button ----
+const no=$('no'),yes=$('yes');let dodges=0;
+const nos=['No 🙃','Are you sure?','Think again 🥺','The button is shy','Too slow!','Nice try','Plot twist: it says yes','I will bring snacks','Please? 🥹','Error 404: No not found','Okay now it\'s just rude 😭'];
+const hints=['','Hmm, the No button seems nervous.','It has a family to feed. Press Yes.','Honestly, the No button has left the building.'];
+function dodge(e){
+  if(e)e.preventDefault();dodges++;
+  no.textContent=nos[Math.min(dodges,nos.length-1)];
+  $('nohint').textContent=hints[Math.min(Math.floor(dodges/3),hints.length-1)];
+  const w=window.innerWidth,h=window.innerHeight,r=no.getBoundingClientRect();
+  no.style.left=Math.max(8,Math.random()*(w-r.width-16))+'px';
+  no.style.top=Math.max(8,Math.random()*(h-r.height-16))+'px';
+  yes.style.transform=`scale(${Math.min(1+dodges*.12,2)})`;
+}
+['pointerenter','pointerdown','touchstart','click'].forEach(ev=>no.addEventListener(ev,dodge,{passive:false}));
+no.addEventListener('keydown',dodge);
+
+yes.onclick=()=>{no.classList.add('hidden');show('plan');confetti(90)};
+$('opts').onclick=e=>{const b=e.target.closest('button');if(!b)return;
+  const f=$('final');f.classList.remove('hidden');
+  f.innerHTML='Deal: <b>'+b.dataset.v+'</b><br>Now text me and tell me when you are free. I will pretend to be calm. 😎';confetti(30)};
+</script>
+</body>
+</html>
